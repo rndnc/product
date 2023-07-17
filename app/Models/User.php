@@ -41,4 +41,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function registerUser($data) {
+        DB::table('user')->insert([
+            'name'=> $data->name,
+            'email'=> $data->email,
+            'password'=>$dat->password
+        ]);
+    }
 }

@@ -16,3 +16,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Auth::routes();
+Route::group(['middleware' => ['auth']], function() {   
+    Route::get('/products','App\Http\Controllers\ProductController@index')->name('products.index');
+    Route::get('/products/create','App\Http\Controllers\ProductController@create')->name('products.create');
+    Route::post('/products/regist','App\Http\Controllers\ProductController@regist')->name('products.regist');
+    Route::get('/products/edit/{product}','App\Http\Controllers\ProductController@edit')->name('products.edit');
+    Route::put('/products/edit/{product}','App\Http\Controllers\ProductController@update')->name('products.update');
+    Route::get('/products/show/{product}','App\Http\Controllers\ProductController@show')->name('products.show');
+    Route::delete('/products/{product}','App\Http\Controllers\ProductController@destroy')->name('products.destroy');
+    });
