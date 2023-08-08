@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Company;
+use DB;
+
 
 class ProductController extends Controller
 {
@@ -18,25 +20,31 @@ class ProductController extends Controller
         $this->middleware('auth');
       }
 
-    public function index(Request $request)
+    //public function index(Request $request)
+    //{
+
+    //$model = new Product();
+    //$products = $model->ProductList();
+
+    //return view('layouts.index', compact('products'));
+
+   // }
+    
+    public function search(Request $request)
     {
-        //$products = Product::latest()->paginate(5);
-        $companies = Company::all();
-        $keyword = $request->input('keyword');
-        $companyId = $request->input('companyId');
+    $companies = Company::all();
+    $model = new Product();
 
-        $query = Product::query();
+    $keyword = $request->input('keyword');
+    $companyId = $request->input('companyId');
+    $products = $model->ProductSearch($keyword,$companyId);
 
-        if(!empty($keyword)) {
-            $query->where('product_name', 'LIKE', "%{$keyword}%");
-        }
-        if(!empty($companyId)) {
-            $query->where('company_id', 'LIKE', $companyId);
-        }
 
-        $products = $query->get();
+   
 
-        return view('layouts.index', compact('products', 'keyword','companies','companyId'));
+
+    return view('layouts.index', compact('products', 'keyword','companies','companyId'));
+
     }
     
 
@@ -70,16 +78,24 @@ class ProductController extends Controller
         'img_path' => 'image|mimes:jpeg,png,jpg,gif,svg',
         ]);
 
-        $input = $request->all();
+       
+        DB::beginTransaction();
+        try {
+            $model = new Product();
+            $img_path = $request->file('img_path'); 
+            if($img_path){
+                $destinationPath = 'storage/app/public/images/';
+                $fileName = $img_path->getClientOriginalName();
+                $img_path->move($destinationPath,$fileName);
+            }
 
-        if($img_path = $request->file('img_path')) {
-            $destinationPath = 'storage/app/public/images/';
-            $productImage =date('YmdHis').".". $img_path->getClientOriginalExtension();
-            $img_path->move($destinationPath,$productImage);
-            $input['img_path'] = "$productImage";
+            //dd($input);
+            $model->registProduct($request,$fileName);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back();
         }
-
-        Product::create($input);
 
         return redirect()->route('products.create');
     }
@@ -93,6 +109,8 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         $companies = Company::all();
+        $model = new Product();
+        $products = $model->ProductList();
         return view('layouts.show',compact('product','companies'));
     }
 
@@ -102,12 +120,11 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product)
+    public function edit($id)
     {
-        $products = Product::all();
         $companies = Company::all();
-        return view('layouts.edit',compact('product'))
-            ->with('companies',$companies);
+        $product = Product::find($id);
+        return view('layouts.edit',compact('product','companies'));
     }
 
     /**
@@ -117,9 +134,9 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $id)
     {        
-        $data = Product::find($product->id);
+
         $request->validate([
             'product_name' => 'required',
             'company_id' => 'required|integer',
@@ -129,22 +146,33 @@ class ProductController extends Controller
             'img_path' => 'image|mimes:jpeg,png,jpg,gif,svg',
             ]);
 
-        $input = $request->all();
-        
-        if($img_path = $request->file('img_path')) {
-            $destinationPath = 'storage/app/public/images/';
-            $productImage =date('YmdHis').".". $img_path->getClientOriginalExtension();
-            $img_path->move($destinationPath,$productImage);
-            $input['img_path'] = "$productImage";
-        }else{
-            unset($input['img_path']);
-        }
 
-        $data->update($input);
+            DB::beginTransaction();
+            try {
+                $model = Product::find($id);
+                $img_path = $request->file('img_path'); 
+                if($img_path){
+                    $destinationPath = 'storage/app/public/images/';
+                    $fileName = $img_path->getClientOriginalName();
+                    $img_path->move($destinationPath,$fileName);
+                }else{
+                    unset($img_path);
+                }
 
-        $companies = Company::all();
-        return redirect()->route('products.edit',compact('product'))
-            ->with('companies',$companies);
+                $model->editProduct($id,$request,$fileName);
+
+
+                DB::commit();
+            } catch (\Exception $e) {
+
+
+                DB::rollback();
+                return back();
+            }
+            $product = Product::find($id);
+
+            $companies = Company::all();
+        return view('layouts.edit',compact('product','companies'));
     }
 
     /**
@@ -158,4 +186,5 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->route('products.index');
     }
+    
 }

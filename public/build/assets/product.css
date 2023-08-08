@@ -1,0 +1,30 @@
+.py-4 {
+  margin-left: 30px;
+  margin-right:30px;
+}
+
+.py-4 .table-borderd img {
+  width: 100px;
+}
+
+.show {
+  width: 500px;
+  margin-bottom: 10px;
+}
+.show table {
+  font-size: 15px;
+}
+
+.show .form-group .error {
+  color:red;
+}
+
+.show img{
+  width:100px;
+}
+
+.show .form-group img{
+  width: 200px;
+}
+
+

@@ -5,7 +5,7 @@
         <div class="pull-left">
             <h2>商品情報編集画面</h2>
         </div>
-        <form action="{{ route('products.update',$product->id )}}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('products.update',['id'=>$product->id] )}}" method="POST" enctype="multipart/form-data">
 
         @csrf
         @method('PUT')
@@ -60,6 +60,7 @@
                 <a class="btn btn-success" href="{{ route('products.show',$product->id )}}">戻る</a>
             </div>
         </form>      
+
     </div>
             
 @endsection

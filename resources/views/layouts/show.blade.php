@@ -9,9 +9,7 @@
 			<tr><th>id</th><td>：</td><td>{{ $product->id}}</td></tr>
 			<tr><th>商品画像</th><td>：</td><td><img src="{{ asset('storage/app/public/images/'.$product->img_path) }}"></td></tr></td></tr>
 			<tr><th>商品名</th><td>：</td><td>{{ $product->product_name }}</td></tr>
-            <tr><th>メーカー名</th><td>：</td><td>@foreach ($companies as $company)
-                                                    @if($company->id==$product->company_id) {{ $company->company_name }} @endif
-                                                    @endforeach</td></tr>
+            <tr><th>メーカー名</th><td>：</td><td>{{ $product->company_name }}</td></tr>
             <tr><th>価格</th><td>：</td><td>{{ $product->price }}円</td></tr>
             <tr><th>在庫数</th><td>：</td><td>{{ $product->stock }}</td></tr>
             <tr><th>コメント</th><td>：</td><td>{{ $product->comment }}</td></tr>
