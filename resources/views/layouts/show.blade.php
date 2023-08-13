@@ -5,6 +5,7 @@
         <div class="col-lg-12 margin-tb">           
             <h2>商品情報詳細画面</h2>
         </div>
+        
         <table>	
 			<tr><th>id</th><td>：</td><td>{{ $product->id}}</td></tr>
 			<tr><th>商品画像</th><td>：</td><td><img src="{{ asset('storage/app/public/images/'.$product->img_path) }}"></td></tr></td></tr>

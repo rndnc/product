@@ -14,13 +14,17 @@ class Product extends Model
         'product_name','img_path','price','stock','company_id','comment','created_at','updated_at',
     ];
 
-   // public function ProductList(){
-    //    $products = DB::table('companies')
-    //        ->join('products','companies.id','=','products.company_id')
-    //        ->get();
+   public function ProductList($id){
 
-       //return $products;
-    //}
+    $product = Product::find($id)
+    ->join('companies','products.company_id','=','companies.id')
+    ->select('products.*','companies.company_name')
+    ->find($id);
+
+    return $product;
+    }
+
+
     public function ProductSearch($keyword,$companyId){
     $products = DB::table('products')
             ->join('companies','products.company_id','=','companies.id')
@@ -37,7 +41,8 @@ class Product extends Model
                 //$search = $query->get();
                // $products = $search->ProductList();
             }
-            $products->get();
+
+            $products = $products->get();
 
         return $products;
     }

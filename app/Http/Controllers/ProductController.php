@@ -39,7 +39,6 @@ class ProductController extends Controller
     $companyId = $request->input('companyId');
     $products = $model->ProductSearch($keyword,$companyId);
 
-
    
 
 
@@ -106,12 +105,12 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($id)
     {
-        $companies = Company::all();
         $model = new Product();
-        $products = $model->ProductList();
-        return view('layouts.show',compact('product','companies'));
+        $product = $model->ProductList($id);
+
+        return view('layouts.show',compact('product'));
     }
 
     /**
@@ -184,7 +183,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
-        return redirect()->route('products.index');
+        return redirect()->route('products.search');
     }
     
 }

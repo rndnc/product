@@ -43,7 +43,7 @@
                 <td>{{ $product->stock}}個</td>
                 <td>{{ $product->company_name }}<td>
                     <form action="{{ route('products.destroy',$product->id)}}" method="POST">
-                        <a class="btn btn-info" href="{{ route('products.show',$product->id )}}">詳細</a>
+                        <a class="btn btn-info" href="{{ route('products.show',['id'=>$product->id] )}}">詳細</a>
                         @csrf
                         @method('DELETE')
                             <button type="submit" class="btn btn-danger" onclick='return confirm("削除しますか？");'>削除</button>
