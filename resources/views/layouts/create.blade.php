@@ -43,7 +43,7 @@
                 </div>
                 <div class="form-group">
                     <label>コメント</lebel>
-                        <textarea class="form-control" style="height:100px" name="comment" class="form-control" placeholder="コメント"></textarea>
+                        <textarea class="form-control" name="comment" class="form-control" placeholder="コメント"></textarea>
                 </div>
                 <div class="form-group">
                     <label>商品画像</lebel>
