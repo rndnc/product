@@ -48,7 +48,7 @@
             </div>
             <div class="form-group">
             <label>コメント</lebel>
-                <textarea class="form-control" style="height:100px" name="comment" placeholder="コメント">{{ $product->comment }}</textarea>
+                <textarea class="form-control"  name="comment" placeholder="コメント">{{ $product->comment }}</textarea>
             </div>
             <div class="form-group">
                 <label>商品画像</lebel>
