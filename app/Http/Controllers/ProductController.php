@@ -44,11 +44,6 @@ class ProductController extends Controller
 
     $sortColumn = $request->input('sortColumn','id');
     $sortDirection = $request->input('sortDirection','desc');
-    error_log('Sort Column: ' . $request->input('sortColumn'));
-    error_log('Sort Direction: ' . $request->input('sortDirection'));
-
-
-
 
     $products = $model->ProductSearch($keyword,$companyId,$jougenPrice,$kagenPrice,$jougenStock,$kagenStock,$sortColumn,$sortDirection);
 
