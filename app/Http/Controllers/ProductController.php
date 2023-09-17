@@ -37,12 +37,24 @@ class ProductController extends Controller
 
     $keyword = $request->input('keyword');
     $companyId = $request->input('companyId');
-    $products = $model->ProductSearch($keyword,$companyId);
+    $jougenPrice = $request->input('jougenPrice');
+    $kagenPrice = $request->input('kagenPrice');
+    $jougenStock = $request->input('jougenStock');
+    $kagenStock = $request->input('kagenStock');
 
-   
+    $sortColumn = $request->input('sortColumn','id');
+    $sortDirection = $request->input('sortDirection','desc');
+    error_log('Sort Column: ' . $request->input('sortColumn'));
+    error_log('Sort Direction: ' . $request->input('sortDirection'));
 
 
-    return view('layouts.index', compact('products', 'keyword','companies','companyId'));
+
+
+    $products = $model->ProductSearch($keyword,$companyId,$jougenPrice,$kagenPrice,$jougenStock,$kagenStock,$sortColumn,$sortDirection);
+
+
+    return view('layouts.index',compact('companies','products','keyword','companyId','jougenPrice','kagenPrice','jougenStock','kagenStock','sortColumn','sortDirection'));
+    //return response()->json($products,$companies,$keyword,$companyId);
 
     }
     

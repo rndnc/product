@@ -5,9 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Kyslik\ColumnSortable\Sortable;
 
 class Product extends Model
 {
+
+    use Sortable;
+    public $sortable = ['id','product_name','price','stock','company_id'];
+
     use HasFactory;
 
     protected $fillable = [
@@ -25,24 +30,42 @@ class Product extends Model
     }
 
 
-    public function ProductSearch($keyword,$companyId){
-    $products = DB::table('products')
-            ->join('companies','products.company_id','=','companies.id')
-            ->select('products.*','companies.company_name');
+    public function ProductSearch($keyword,$companyId,$jougenPrice,$kagenPrice,$jougenStock,$kagenStock,$sortColumn,$sortDirection){
+    // $query = DB::table('products')
+    //         ->join('companies','products.company_id','=','companies.id')
+    //         ->select('products.*','companies.company_name')
+    //         ->sortable();
+        $query = self::join('companies','products.company_id','=','companies.id')
+        ->select('products.*','companies.company_name')
+        ->sortable();
             if(!empty($keyword)) {
-                $products->where('product_name', 'LIKE', "%{$keyword}%");
+                $query->where('product_name', 'LIKE', "%{$keyword}%");
 
                 //$search = $query->get();
                 //$products = $search->ProductList();
             }
             if(!empty($companyId)) {
-                $products->where('company_id', '=', $companyId);
+                $query->where('company_id', '=', $companyId);
 
                 //$search = $query->get();
                // $products = $search->ProductList();
             }
 
-            $products = $products->get();
+            if(!empty($jougenPrice)) {
+                $query->where('price', '<=', $jougenPrice);
+            }
+            if(!empty($kagenPrice)) {
+                $query->where('price', '>=', $kagenPrice);
+            }
+
+            if(!empty($jougenStock)) {
+                $query->where('stock', '<=', $jougenStock);
+            }
+            if(!empty($kagenStock)) {
+                $query->where('stock', '>=', $kagenStock);
+            }
+
+            $products = $query->orderBy($sortColumn,$sortDirection)->paginate(10);
 
         return $products;
     }

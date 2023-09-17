@@ -7,29 +7,56 @@
     <div class="show">
         <form method="get" action="{{ route('products.search')}}" class="form-inline">
             <div class="form-group">
-                <input type="text" name="keyword" class="form-control" value="{{ $keyword }}" placeholder="検索キーワード">
+                <input id="keyword" type="text" name="keyword" class="form-control" value="{{ $keyword }}" placeholder="検索キーワード">
             </div>
             <div class="form-group">
-                <select  method="get" action="{{ route('products.search')}}"class="form-select" name="companyId">
-                    <option>メーカーを選択してください</option>
+                <select id="companyId" method="get" action="{{ route('products.search')}}"class="form-select" name="companyId" title="メーカーを選択してください">
+                    <option value="">メーカーを選択してください</option>
                         @foreach($companies as $company)
                             <option value="{{ $company->id}}">{{ $company->company_name}}</option>
                         @endforeach
                 </select>
             </div>
-            <input type="submit" value="検索" class="btn btn-info">
+            <div class="form-group">
+                <label>商品価格</label>
+                <input id="jougenPrice" type="number" name="jougenPrice" class="form-control" value="{{ $jougenPrice }}" placeholder="上限">
+            </div>
+            <div class="form-group">
+                <input id="kagenPrice" type="number" name="kagenPrice" class="form-control" value="{{ $kagenPrice }}" placeholder="下限">
+            </div>
+            <div class="form-group">
+                <label>在庫</label>
+                <input id="jougenStock" type="number" name="jougenStock" class="form-control" value="{{ $jougenStock }}"placeholder="上限">
+            </div>
+            <div class="form-group">
+                <input id="kagenStock" type="number" name="kagenStock" class="form-control" value="{{ $kagenPrice }}" placeholder="下限">
+            </div>
+
+            <input type="submit" value="検索" class="btn btn-info" id="search-btn">
         </form>
     </div>
 
     <div class="row">
-        <table class="table table-borderd">
+        <table class="table table-borderd" id="table-1">
             <tr>
-                <th>id</th>
+                <th>
+                    @sortablelink('id','ID')
+                    <!-- <a href="" class="sortable-link" data-column="id" data-direction="asc">ID</a> -->
+                </th>
                 <th>商品画像</th>
-                <th>商品名</th>
-                <th>価格</th>
-                <th>在庫数</th>
-                <th>メーカー名</th>
+                <th>
+                    <a href="" class="sortable-link" data-column="product_name" data-direction="asc">商品名</a>
+                <!-- @sortablelink('product_name','商品名') -->
+                </th>
+                <th>
+                    <a href="" class="sortable-link" data-column="price" data-direction="asc">価格</a>
+                    </th>
+                <th>
+                    <a href="" class="sortable-link" data-column="stock" data-direction="asc">在庫</a>
+                </th>
+                <th>
+                    <a href="" class="sortable-link" data-column="company_id" data-direction="asc">メーカー名</a>
+                </th>
                 <th> 
                     <a class="btn btn-primary" href="{{ route('products.create')}}">新規登録</a>
                 </th>
@@ -37,7 +64,7 @@
             @foreach ($products as $product)
             <tr>
                 <td>{{ $product->id}}</td>
-                <td><img src="{{ asset('storage/app/public/images/'.$product->img_path)}}"></td>
+                <td><img alt="" src="{{ asset('storage/app/public/images/'.$product->img_path)}}"></td>
                 <td>{{ $product->product_name}}</td>
                 <td>{{ $product->price}}円</td>
                 <td>{{ $product->stock}}個</td>
@@ -53,6 +80,7 @@
             @endforeach
         </table>
     </div>
+    {{ $products->links() }}
 
 @endsection
     
