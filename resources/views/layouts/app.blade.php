@@ -20,33 +20,45 @@
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function(){
             $.ajax({
                 type: 'GET',
                 url: "{{ route('products.search') }}",
                 dataType: 'html',
             })
             .done(function(data) {
-                let newTable = $(data).find('#table-1');
-                $('#table-1').html(newTable);
+                let newTable = $(data).find('#table-2');
+                $('#table-2').html(newTable);
                 console.log("Ajaxリクエスト成功");
             })
             .fail(function() {
                 console.log("Ajaxリクエスト失敗");
             });
+        });
 
-            $(function(){
-                $(".sortable-link").on("click",function(event){
+        $(function(){
+            let sortDirection = $(this).data('direction');
+            $('.sortable-link').on('click',function(event){
                     event.preventDefault();
                     let sortColumn = $(this).data('column');
-                    let sortDirection = $(this).data('direction');
-                    sortDirection = sortDirection === "asc" ? "desc" : "asc";
-                    console.log("ソートリンクがクリックされました");
+                    sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+                    let keyword =$("#keyword").val();
+                let companyId =$("#companyId").val();
+                let jougenPrice =$('#jougenPrice').val();
+                let kagenPrice =$('#kagenPrice').val();
+                let jougenStock =$('#jougenStock').val();
+                let kagenStock =$('#kagenStock').val();
 
                     $.ajax({
                         type:'GET',
                         url:"{{ route('products.search') }}",
                         data:{
+                            'keyword': keyword,
+                            'companyId' : companyId,
+                            'jougenPrice' :jougenPrice,
+                            'kagenPrice' :kagenPrice,
+                            'jougenStock' :jougenStock,
+                            'kagenStock' :kagenStock,
                            'sortColumn': sortColumn,
                            'sortDirection' :sortDirection
                         },
@@ -54,13 +66,13 @@
                     })
 
                     .done(function(data){
-                        let newTable = $(data).find('#table-1');
-                        $('#table-1').html(newTable); 
+                        let newTable = $(data).find('#table-2');
+                        $('#table-2').html(newTable); 
                         console.log("Ajax3リクエスト成功");
                     })
                     .fail(function() {
                         console.log("Ajax3リクエスト失敗");
-                    });                
+                    }); 
                 });
             });
 
@@ -88,8 +100,8 @@
                 })
 
                 .done(function(data){
-                    let newTable = $(data).find('#table-1');
-                    $('#table-1').html(newTable); 
+                    let newTable = $(data).find('#table-2');
+                    $('#table-2').html(newTable); 
                     console.log("Ajax2リクエスト成功");
                 })
                 .fail(function() {
@@ -97,8 +109,8 @@
                 });                
             });
         });
-    });
-});
+
+   
 
 
 

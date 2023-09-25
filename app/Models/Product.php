@@ -31,13 +31,13 @@ class Product extends Model
 
 
     public function ProductSearch($keyword,$companyId,$jougenPrice,$kagenPrice,$jougenStock,$kagenStock,$sortColumn,$sortDirection){
-    // $query = DB::table('products')
-    //         ->join('companies','products.company_id','=','companies.id')
-    //         ->select('products.*','companies.company_name')
-    //         ->sortable();
-        $query = self::join('companies','products.company_id','=','companies.id')
-        ->select('products.*','companies.company_name')
-        ->sortable();
+    $query = DB::table('products')
+            ->join('companies','products.company_id','=','companies.id')
+            ->select('products.*','companies.company_name');
+        //     ->sortable();
+        // $query = self::join('companies','products.company_id','=','companies.id')
+        // ->select('products.*','companies.company_name')
+        // ->sortable();
             if(!empty($keyword)) {
                 $query->where('product_name', 'LIKE', "%{$keyword}%");
 

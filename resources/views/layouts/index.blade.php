@@ -31,7 +31,6 @@
             <div class="form-group">
                 <input id="kagenStock" type="number" name="kagenStock" class="form-control" value="{{ $kagenPrice }}" placeholder="下限">
             </div>
-
             <input type="submit" value="検索" class="btn btn-info" id="search-btn">
         </form>
     </div>
@@ -40,27 +39,29 @@
         <table class="table table-borderd" id="table-1">
             <tr>
                 <th>
-                    @sortablelink('id','ID')
-                    <!-- <a href="" class="sortable-link" data-column="id" data-direction="asc">ID</a> -->
-                </th>
-                <th>商品画像</th>
-                <th>
-                    <a href="" class="sortable-link" data-column="product_name" data-direction="asc">商品名</a>
-                <!-- @sortablelink('product_name','商品名') -->
+                    <button class="btn sortable-link" data-column="id" data-direction="asc" type="button">ID</button>
                 </th>
                 <th>
-                    <a href="" class="sortable-link" data-column="price" data-direction="asc">価格</a>
-                    </th>
-                <th>
-                    <a href="" class="sortable-link" data-column="stock" data-direction="asc">在庫</a>
+                <button class="btn sortable" >商品画像</button>
                 </th>
                 <th>
-                    <a href="" class="sortable-link" data-column="company_id" data-direction="asc">メーカー名</a>
+                    <button class="btn sortable-link" data-column="product_name" data-direction="asc" type="button">商品名</button>
+                </th>
+                <th>
+                    <button class="btn sortable-link" data-column="price" data-direction="asc" type="button">価格</button>
+                </th>
+                <th>
+                    <button class="btn sortable-link" data-column="stock" data-direction="asc" type="button">在庫</button>
+                </th>
+                <th>
+                    <button class="btn sortable-link" data-column="company_id" data-direction="asc" type="button">メーカー名</button>
                 </th>
                 <th> 
                     <a class="btn btn-primary" href="{{ route('products.create')}}">新規登録</a>
                 </th>
             </tr>
+            </table>
+            <table class="table table-borderd" id="table-2">
             @foreach ($products as $product)
             <tr>
                 <td>{{ $product->id}}</td>
