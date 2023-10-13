@@ -27,8 +27,8 @@
                 dataType: 'html',
             })
             .done(function(data) {
-                let newTable = $(data).find('#table-2');
-                $('#table-2').html(newTable);
+                let newTable = $(data).find('#table-1');
+                $('#table-1').html(newTable);
                 console.log("Ajaxリクエスト成功");
             })
             .fail(function() {
@@ -38,7 +38,7 @@
 
         $(function(){
             let sortDirection = $(this).data('direction');
-            $('.sortable-link').on('click',function(event){
+            $('#table-1').on('click', '.sortable-link', function(event) {
                     event.preventDefault();
                     let sortColumn = $(this).data('column');
                     sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
@@ -59,15 +59,15 @@
                             'kagenPrice' :kagenPrice,
                             'jougenStock' :jougenStock,
                             'kagenStock' :kagenStock,
-                           'sortColumn': sortColumn,
-                           'sortDirection' :sortDirection
+                            'sortColumn': sortColumn,
+                            'sortDirection' :sortDirection
                         },
                         dataType:'html',
                     })
 
                     .done(function(data){
-                        let newTable = $(data).find('#table-2');
-                        $('#table-2').html(newTable); 
+                        let newTable = $(data).find('#table-1');
+                        $('#table-1').html(newTable); 
                         console.log("Ajax3リクエスト成功");
                     })
                     .fail(function() {
@@ -90,18 +90,18 @@
                     url:"{{ route('products.search') }}",
                     data:{
                         'keyword': keyword,
-                       'companyId' : companyId,
-                       'jougenPrice' :jougenPrice,
-                       'kagenPrice' :kagenPrice,
-                       'jougenStock' :jougenStock,
-                       'kagenStock' :kagenStock
+                        'companyId' : companyId,
+                        'jougenPrice' :jougenPrice,
+                        'kagenPrice' :kagenPrice,
+                        'jougenStock' :jougenStock,
+                        'kagenStock' :kagenStock
                     },
                     dataType:'html',
                 })
 
                 .done(function(data){
-                    let newTable = $(data).find('#table-2');
-                    $('#table-2').html(newTable); 
+                    let newTable = $(data).find('#table-1');
+                    $('#table-1').html(newTable); 
                     console.log("Ajax2リクエスト成功");
                 })
                 .fail(function() {
@@ -110,7 +110,36 @@
             });
         });
 
-   
+        $(function(){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $('#table-1').on('click', '.delete-btn', function(event) {
+                event.preventDefault();
+                let deleteUrl = $(this).data('delete-url');
+                console.log(deleteUrl);
+                let tr = $(this).closest('tr');
+                console.log('クリック');
+                if(confirm('削除しますか？')){
+                $.ajax({
+                    type:'DELETE',
+                    url: deleteUrl,
+                })
+
+                .done(function(data){                    
+                        tr.remove();
+                        console.log("Ajax4リクエスト成功");
+                })
+                .fail(function() {
+                    alert('削除に失敗しました。');
+                    
+                });
+                }             
+            });
+        });
+
 
 
 
@@ -159,8 +188,8 @@
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                        onclick="event.preventDefault();
+                                                    document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 

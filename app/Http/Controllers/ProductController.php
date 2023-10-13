@@ -49,7 +49,7 @@ class ProductController extends Controller
 
 
     return view('layouts.index',compact('companies','products','keyword','companyId','jougenPrice','kagenPrice','jougenStock','kagenStock','sortColumn','sortDirection'));
-    //return response()->json($products,$companies,$keyword,$companyId);
+
 
     }
     
@@ -84,7 +84,7 @@ class ProductController extends Controller
         'img_path' => 'image|mimes:jpeg,png,jpg,gif,svg',
         ]);
 
-       
+
         DB::beginTransaction();
         try {
             $model = new Product();
@@ -189,8 +189,15 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        $product->delete();
-        return redirect()->route('products.search');
+        try {
+            // 商品を削除
+            $product->delete();
+    
+            return response()->json(['message' => '商品を削除しました']);
+        } catch (\Exception $e) {
+            // エラーの場合
+            return response()->json(['message' => '削除に失敗しました'], 500);
+        }
     }
     
 }

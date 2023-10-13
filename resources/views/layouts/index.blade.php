@@ -29,9 +29,11 @@
                 <input id="jougenStock" type="number" name="jougenStock" class="form-control" value="{{ $jougenStock }}"placeholder="上限">
             </div>
             <div class="form-group">
-                <input id="kagenStock" type="number" name="kagenStock" class="form-control" value="{{ $kagenPrice }}" placeholder="下限">
+                <input id="kagenStock" type="number" name="kagenStock" 
+                class="form-control" value="{{ $kagenPrice }}" placeholder="下限">
             </div>
             <input type="submit" value="検索" class="btn btn-info" id="search-btn">
+            
         </form>
     </div>
 
@@ -60,8 +62,7 @@
                     <a class="btn btn-primary" href="{{ route('products.create')}}">新規登録</a>
                 </th>
             </tr>
-            </table>
-            <table class="table table-borderd" id="table-2">
+  
             @foreach ($products as $product)
             <tr>
                 <td>{{ $product->id}}</td>
@@ -70,12 +71,10 @@
                 <td>{{ $product->price}}円</td>
                 <td>{{ $product->stock}}個</td>
                 <td>{{ $product->company_name }}<td>
-                    <form action="{{ route('products.destroy',$product->id)}}" method="POST">
+                    <form action="{{ route('products.destroy',['product' => $product->id]) }}" method="POST">
                         <a class="btn btn-info" href="{{ route('products.show',['id'=>$product->id] )}}">詳細</a>
-                        @csrf
-                        @method('DELETE')
-                            <button type="submit" class="btn btn-danger" onclick='return confirm("削除しますか？");'>削除</button>
-                    </form>
+                        <button type="button" class="btn btn-danger delete-btn" data-delete-url="{{ route('products.destroy', ['product' => $product->id]) }}" >削除</button>
+                    </form>                    
                 </td>
             </tr>
             @endforeach
