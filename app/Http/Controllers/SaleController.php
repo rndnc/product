@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\sale;
 use Illuminate\Support\Facades\DB;
+use App\Models\Product;
+use Illuminate\Support\Facades\Log;
 
 class SaleController extends Controller
 {
@@ -25,8 +27,7 @@ class SaleController extends Controller
                 if($stock > $model->stock){
                     return log::debug('在庫切れ');
                 } else {
-                    $apistock =$model->stock-$stock;
-                    $model->decrement($apistock);
+                    $model->decrement('stock',$stock);
                     log::debug('更新完了');
                 }
                 DB::commit();
